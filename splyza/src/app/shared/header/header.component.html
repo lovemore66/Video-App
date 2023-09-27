@@ -1,0 +1,17 @@
+<main>
+  <div class="logo">
+    <img
+      *ngIf="currentPath === '/'"
+      src="../../../assets/icons/logo.svg"
+      alt="Splyza Logo"
+    />
+    <div *ngIf="currentPath !== '/'" class="back" (click)="navigaeToHome()">
+      <img src="../../../assets/icons/left.png" alt="Back arrow" />
+      <p>Back</p>
+    </div>
+  </div>
+  <section>
+    <img src="{{ user$?.pictureUrl }}" alt="" />
+    <p>{{ user$?.name }}</p>
+  </section>
+</main>

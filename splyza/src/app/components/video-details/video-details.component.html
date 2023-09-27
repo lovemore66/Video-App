@@ -1,0 +1,99 @@
+<div class="loader" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
+
+<main *ngIf="video$ | async as video">
+  <div *ngIf="logedInUser?.name === video.author.name" class="form">
+    <input type="text" [(ngModel)]="inputValue" />
+    <button (click)="save()">Save</button>
+  </div>
+  <div class="parent">
+    <div class="video">
+      <h2 *ngIf="logedInUser?.name !== video.author.name">{{ video.title }}</h2>
+      <!-- This will not work with the current API due to CORS issues. A change is needed on the backend to support this -->
+      <!-- <video #videoPlayer controls (timeupdate)="onTimeUpdate($event)" >
+      <source [src]="video.url" type="video/mp4">
+      Your browser does not support the video tag.
+    </video> -->
+      <video
+        #videoPlayer
+        controls
+        (timeupdate)="onTimeUpdate($event)"
+        (loadedmetadata)="onVideoLoaded()"
+      >
+        <source src="../../../assets/videos/small.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="child" [@animateChild]="animateState" *ngIf="showChild">
+      <img src="../../../assets/icons/star-w.png" alt="" />
+    </div>
+  </div>
+  <div class="snap-star">
+    <canvas #canvas style="display: none"></canvas>
+    <div class="btns">
+      <div
+        class="snapshot"
+        (click)="
+          addSnapshotOrStar(
+            video.id,
+            'snapshot',
+            currentTimeFrame,
+            currentDataUri
+          )
+        "
+      >
+        <img src="../../../assets/icons/cam-b.png" alt="" />
+        <p>Snapshot</p>
+      </div>
+      <div
+        class="star"
+        (click)="addSnapshotOrStar(video.id, 'star', currentTimeFrame, null)"
+      >
+        <img src="../../../assets/icons/star-b.png" alt="" />
+        <p>Star</p>
+      </div>
+    </div>
+    <div class="profile">
+      <img src="{{ video.author.pictureUrl }}" alt="" />
+      <p>{{ video.author.name }}</p>
+    </div>
+  </div>
+  <strong>Reactions</strong>
+  <div class="reactions">
+    <div
+      class="card"
+      *ngFor="let reaction of Reactions$; let i = index"
+      [ngClass]="{ 'active': selectedTab === i + 1 }"
+      (click)="moveVideoForward(reaction.timeframe, i)"
+    >
+      <section>
+        <div class="first-column">
+          <div *ngIf="reaction.type === 'star'" class="icon">
+            <img src="../../../assets/icons/star-g.png" alt="" />
+          </div>
+          <div *ngIf="reaction.type === 'snapshot'" class="icon">
+            <img src="../../../assets/icons/cam-g.png" alt="" />
+          </div>
+          <p>
+            {{ this.getFormattedTime(reaction?.timeframe) }}
+          </p>
+        </div>
+        <div class="second-column">
+          <p>{{ reaction.author?.name }}</p>
+          <p *ngIf="reaction.createdDate">
+            ({{ getFormattedDate(reaction.createdDate) }})
+          </p>
+          <p *ngIf="reaction.postedDate">
+            ({{ getFormattedDate(reaction.postedDate) }})
+          </p>
+        </div>
+      </section>
+      <div *ngIf="reaction.imageUrl" class="image">
+        <img src="{{ reaction.imageUrl }}" alt="" />
+      </div>
+    </div>
+  </div>
+</main>

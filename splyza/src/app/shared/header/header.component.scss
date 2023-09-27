@@ -1,0 +1,39 @@
+main {
+  background-color: rgb(39, 39, 57);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+}
+
+.logo {
+  cursor: pointer;
+  img {
+    color: white;
+    height: 50px;
+    margin-left: -10px;
+  }
+}
+.back {
+  display: flex;
+  gap: 1px;
+  align-items: center;
+  color: white;
+}
+
+section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 200px;
+  gap: 10px;
+  img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+  }
+  p {
+    color: white;
+    font-weight: bold;
+  }
+}

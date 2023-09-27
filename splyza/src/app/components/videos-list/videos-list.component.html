@@ -1,0 +1,45 @@
+<div class="loader" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<main>
+  <div class="tabs">
+    <button
+      *ngFor="let tab of tabs"
+      (click)="toggleTab(tab.tabNumber)"
+      [class.active]="activeTab === tab.tabNumber"
+    >
+      <img
+        [src]="activeTab === tab.tabNumber ? tab.iconActive : tab.iconInactive"
+        alt="{{ tab.altText }}"
+      />
+    </button>
+  </div>
+  <div class="container">
+    <section [ngClass]="{ grid: activeTab === 1, list: activeTab === 2 }">
+      <div *ngFor="let video of videos$">
+        <div class="card" (click)="showVideoDetails(video.id)">
+          <div class="image_title">
+            <div class="img">
+              <img [src]="video.author.pictureUrl" alt="" />
+            </div>
+            <p>{{ video.title }}</p>
+          </div>
+          <section>
+            <div class="description">
+              <p>{{ getFormattedDate(video.createdDate) }}</p>
+              <div class="profile">
+                <div class="sec">
+                  <img [src]="video.author.pictureUrl" alt="" />
+                </div>
+                <p>{{ video.author.name }}</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
